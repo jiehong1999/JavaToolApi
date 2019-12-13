@@ -3,7 +3,9 @@ package com.baidu.fanyi.fanyi.controllerApi;
 import com.baidu.fanyi.fanyi.common.GetVal;
 
 import com.baidu.fanyi.fanyi.common.Results;
+import com.baidu.fanyi.fanyi.service.FanYiApiSelection;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,9 @@ import java.util.*;
 
 @Controller
 public class FanYiController {
+    @Autowired
+    private FanYiApiSelection selections=new FanYiApiSelection();
+
     @RequestMapping(value="/fanYiApi",method= RequestMethod.POST)
     @ResponseBody
     public Object fanYiApi(
@@ -48,6 +53,21 @@ public class FanYiController {
                 resmap.put(entry.getKey(),GetVal.resVal(entry.getKey(),from,to));
             }
             return new Results<Object>(resmap);//转回Map返回数据
+        }catch (RuntimeException e){
+            return new Results<Object>(500,e.getMessage(),"系统异常",null);
+        }
+    }
+
+    @RequestMapping(value="/fanYiApiSelection",method= RequestMethod.POST)
+    @ResponseBody
+    public Object fanYiApiSelection(
+            @RequestParam(value="val",required =false)String val
+            ,@RequestParam(value="from",required = false)String from
+            ,@RequestParam(value="toList",required = false)List<String>toList){
+        try {
+
+//            return new Results<Object>(selections.Selection(val,from,toList));//转回Map返回数据
+            return new Results<Object>(500,"","接口未开放",null);
         }catch (RuntimeException e){
             return new Results<Object>(500,e.getMessage(),"系统异常",null);
         }

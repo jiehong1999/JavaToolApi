@@ -33,4 +33,13 @@ public class  GetVal {
         JSONObject dst=(JSONObject)list.get(0);
         return dst.getString("dst");
     }
+
+    public String resVals(String val,String from,String to){
+        TransApi api = new TransApi(APP_ID, SECURITY_KEY);
+        String data =api.getTransResult(val, from, to);
+        JSONObject obj =JSONObject.parseObject(data);
+        JSONArray list=obj.getJSONArray("trans_result");
+        JSONObject dst=(JSONObject)list.get(0);
+        return dst.getString("dst");
+    }
 }

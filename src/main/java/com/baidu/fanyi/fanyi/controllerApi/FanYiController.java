@@ -3,7 +3,9 @@ package com.baidu.fanyi.fanyi.controllerApi;
 import com.baidu.fanyi.fanyi.common.GetVal;
 
 import com.baidu.fanyi.fanyi.common.Results;
+import com.baidu.fanyi.fanyi.entity.FanYiList;
 import com.baidu.fanyi.fanyi.service.FanYiApiSelection;
+import com.baidu.fanyi.fanyi.thread.FabYiSelectionThread;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.xml.transform.Result;
 import java.util.*;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 public class FanYiController {
@@ -65,10 +69,9 @@ public class FanYiController {
             ,@RequestParam(value="from",required = false)String from
             ,@RequestParam(value="toList",required = false)List<String>toList){
         try {
-
-//            return new Results<Object>(selections.Selection(val,from,toList));//转回Map返回数据
-            return new Results<Object>(500,"","接口未开放",null);
-        }catch (RuntimeException e){
+              return new Results<Object>(selections.SelectionMap(val,from,toList));//返回数据
+//            return new Results<Object>(500,"","接口未开放",null);
+        }catch (RuntimeException | InterruptedException | ExecutionException e){
             return new Results<Object>(500,e.getMessage(),"系统异常",null);
         }
     }

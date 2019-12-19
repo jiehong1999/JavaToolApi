@@ -1,31 +1,29 @@
 package com.baidu.fanyi.fanyi.service;
 
-import com.baidu.fanyi.fanyi.common.GetVal;
-import com.baidu.fanyi.fanyi.common.Results;
-import com.google.gson.Gson;
+
+import com.baidu.fanyi.fanyi.entity.FanYiList;
+import com.baidu.fanyi.fanyi.thread.FabYiSelectionThread;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 @Service
-public class FanYiApiSelection {
-
-    public Object Selection(String val,String from,List<String> toList) {
-            Gson gson = new Gson();
-            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-            try {
-                map = gson.fromJson(val, map.getClass());
-            } catch (RuntimeException e) {
-                return new Results<Object>(450, e.getMessage(), "翻译格式为Map", null);
-            }
-            LinkedHashMap<String, String> resmap = new LinkedHashMap<String, String>();
-
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                resmap.put(entry.getKey(), GetVal.resVal(entry.getKey(),from,"en"));
-            }
-
-        return null;
+public class FanYiApiSelection{
+    public List<FanYiList> SelectionMap(String val, String from,List<String> toList) throws RuntimeException, InterruptedException, ExecutionException {
+        List<FanYiList> list=new ArrayList<>();
+        for (int i=0;i<toList.size();i++){
+            FabYiSelectionThread td = new FabYiSelectionThread(val,from,toList.get(i));
+            FutureTask<Object> result = new FutureTask<Object>(td);
+            new Thread(result).start();
+            Object sum = result.get();  //FutureTask 可用于 闭锁 类似于CountDownLatch的作用，在所有的线程没有执行完成之后这里是不会执行的
+            System.out.println(sum);
+            System.out.println("------------------------------------");
+        }
+       return list;
     }
 }

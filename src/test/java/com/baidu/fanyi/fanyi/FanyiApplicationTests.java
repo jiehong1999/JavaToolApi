@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @SpringBootTest
 class FanyiApplicationTests {
@@ -43,18 +46,20 @@ class FanyiApplicationTests {
                 "    \"手机号码有误\":\"手机号码有误\",\n" +
                 "    \"请输入图形验证码\":\"请输入图形验证码\",\n" +
                 "    \"两个密码不一致\":\"两个密码不一致\"}";
-        List<FanYiList> list =new ArrayList<>();
         List<String>toList=new ArrayList<>();
         toList.add("jp");
         toList.add("en");
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(toList.size());
+
+
+        ArrayList<Future<Object>> results = new ArrayList<Future<Object>>();
+        ExecutorService exec = Executors.newCachedThreadPool();
         for (int i=0;i<toList.size();i++){
-            new Thread((Runnable) new FabYiSelectionThread(val,"zh",toList.get(i))).start();
-//            list.add(selections.SelectionMap(val,from,"en"));
+//            FabYiSelectionThread td = new FabYiSelectionThread(val,from,toList.get(i));
+            results.add(exec.submit(new FabYiSelectionThread(val,"zh",toList.get(i))));
+
         }
-     for (int i=0;i<list.size();i++){
-         System.out.println(list.get(i).getMapData());
-     }
+         System.out.println(results);
+
 
     }
 }

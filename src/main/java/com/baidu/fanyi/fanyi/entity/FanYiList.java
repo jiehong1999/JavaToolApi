@@ -7,7 +7,7 @@ import java.util.List;
 
 public class FanYiList {
     private String name;
-    private LinkedHashMap<String,String> MapData;
+    private Object MapData;
 
     public String getName() {
         return name;
@@ -17,19 +17,19 @@ public class FanYiList {
         this.name = name;
     }
 
-    public LinkedHashMap<String, String> getMapData() {
+    public Object getMapData() {
         return MapData;
     }
 
-    public void setMapData(LinkedHashMap<String, String> mapData) {
+    public void setMapData(Object mapData) {
         MapData = mapData;
     }
 
-    public FanYiList() {
-    }
-
-    public FanYiList(String name, LinkedHashMap<String, String> mapData) {
+    public FanYiList(String name, Object mapData) {
         this.name = name;
         MapData = mapData;
+    }
+    public FanYiList() {
+
     }
 }

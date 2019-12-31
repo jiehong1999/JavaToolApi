@@ -8,22 +8,27 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
 @Service
 public class FanYiApiSelection{
-    public List<FanYiList> SelectionMap(String val, String from,List<String> toList) throws RuntimeException, InterruptedException, ExecutionException {
-        List<FanYiList> list=new ArrayList<>();
+    public Object SelectionMap(String val, String from,List<String> toList) throws RuntimeException{
+        List<Object> list=new ArrayList<>();
+        ExecutorService exec = Executors.newCachedThreadPool();
         for (int i=0;i<toList.size();i++){
-            FabYiSelectionThread td = new FabYiSelectionThread(val,from,toList.get(i));
-            FutureTask<Object> result = new FutureTask<Object>(td);
-            new Thread(result).start();
-            Object sum = result.get();  //FutureTask 可用于 闭锁 类似于CountDownLatch的作用，在所有的线程没有执行完成之后这里是不会执行的
-            System.out.println(sum);
-            System.out.println("------------------------------------");
+            try {
+                Object oj=exec.submit(new FabYiSelectionThread(val,from,toList.get(i))).get();
+                if(oj!=null){
+                    list.add(oj);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
+        exec.shutdown();
+        System.out.println(list);
        return list;
     }
 }

@@ -7,6 +7,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+/*
+*
+打印service目录的日志文件
+ *
+ */
 @Component
 @Aspect
 public class LogAspect {
@@ -21,7 +26,7 @@ public class LogAspect {
         try {
             Object result = joinPoint.proceed();
             long end = System.currentTimeMillis();
-            LOG.info("执行方法" + joinPoint.getSignature()+ "消耗时长: " + (end - start) + " ms!");
+            LOG.debug("执行方法" + joinPoint.getSignature()+ "消耗时长: " + (end - start) + " ms!");
             return result;
 
         } catch (Throwable e) {

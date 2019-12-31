@@ -70,8 +70,7 @@ public class FanYiController {
             ,@RequestParam(value="toList",required = false)List<String>toList){
         try {
               return new Results<Object>(selections.SelectionMap(val,from,toList));//返回数据
-//            return new Results<Object>(500,"","接口未开放",null);
-        }catch (RuntimeException | InterruptedException | ExecutionException e){
+        }catch (RuntimeException e){
             return new Results<Object>(500,e.getMessage(),"系统异常",null);
         }
     }

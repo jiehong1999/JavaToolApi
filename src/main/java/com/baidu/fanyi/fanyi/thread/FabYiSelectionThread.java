@@ -13,7 +13,7 @@ public class  FabYiSelectionThread implements Callable<Object> {
     String from;
     String to;
     LinkedHashMap<String, String> map = new LinkedHashMap<>();
-
+    List<FanYiList> list =new ArrayList<>();
     public FabYiSelectionThread() {
     }
 
@@ -35,6 +35,7 @@ public class  FabYiSelectionThread implements Callable<Object> {
             for(Map.Entry<String, String> entry : map.entrySet()) {
                 //将mqp值翻译
                 resmap.put(entry.getKey(),GetVal.resVal(entry.getValue(),from,to));
+
             }
         }catch (RuntimeException e) {
             System.out.println(e.getMessage());

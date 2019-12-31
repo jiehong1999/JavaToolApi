@@ -25,6 +25,7 @@ import javax.net.ssl.X509TrustManager;
 public class  GetVal {
     private static final String APP_ID = "20191124000360031";
     private static final String SECURITY_KEY = "Y9Px4Wtk0H0fOmAxIsdG";
+
     public static String resVal(String val,String from,String to){
         TransApi api = new TransApi(APP_ID, SECURITY_KEY);
         String data =api.getTransResult(val, from, to);

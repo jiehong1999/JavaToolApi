@@ -74,4 +74,28 @@ public class FanYiController {
             return new Results<Object>(500,e.getMessage(),"系统异常",null);
         }
     }
+
+    @RequestMapping(value="/fanYiApiMapValue",method= RequestMethod.POST)
+    @ResponseBody
+    public Object fanYiApiMapValue(
+            @RequestParam(value="val",required =false)String val
+            ,@RequestParam(value="from",required = false)String from
+            ,@RequestParam(value="to",required = false)String to){
+        try {
+            Gson gson = new Gson();
+            LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+            try {
+                map = gson.fromJson(val, map.getClass());
+            }catch (RuntimeException e){
+                return new Results<Object>(450,e.getMessage(),"fanYiApiMapValue",null);
+            }
+            LinkedHashMap<String, String> resmap = new LinkedHashMap<String, String>();
+            for(Map.Entry<String, String> entry : map.entrySet()){
+                resmap.put(entry.getKey(),GetVal.resVal(entry.getValue(),from,to));
+            }
+            return new Results<Object>(resmap);//转回Map返回数据
+        }catch (RuntimeException e){
+            return new Results<Object>(500,e.getMessage(),"系统异常",null);
+        }
+    }
 }
